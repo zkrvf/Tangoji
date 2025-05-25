@@ -1,0 +1,43 @@
+#allCardsTableContainer {
+    margin-top: 15px;
+    overflow-x: auto;
+}
+#allCardsTable th,
+#allCardsTable td {
+    padding: 10px 12px;
+    vertical-align: middle;
+}
+#allCardsTable th {
+    font-size: 0.85em;
+}
+#allCardsTable .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.85em;
+    margin-right: 5px;
+}
+#noCardsMessage a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+#noCardsMessage a:hover {
+    color: var(--secondary-color);
+}
+.container h1 {
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+.settings-section {
+    background-color: var(--card-background);
+    padding: 20px 25px;
+    margin-top: 30px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+.settings-section h2 {
+    color: var(--secondary-color, #E65100);
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--border-color);
+}

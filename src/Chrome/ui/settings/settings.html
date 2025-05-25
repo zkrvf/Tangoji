@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../theme-preload.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangoji - Settings</title>
+    <link rel="stylesheet" href="../dashboard/dashboard.css">
+    <link rel="stylesheet" href="settings.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="../../icons/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-inner-container">
+            <a href="../dashboard/dashboard.html" class="nav-logo-link">
+                <img src="../../icons/logo_web_transparent.png" alt="Tangoji Logo" id="navbarLogo">
+            </a>
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Home</a></li>
+                <li><a href="../import/import.html">Import</a></li>
+                <li><a href="../generate/generate.html">Generate</a></li>
+                <li><a href="../study/study.html">Study</a></li>
+                <li><a href="../progress/progress.html">Progress</a></li>
+                <li><a href="../settings/settings.html" class="active">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Tangoji Settings</h1>
+        <div class="settings-section">
+          <h2 data-emoji="🌐">Language Settings</h2>
+          <div class="form-group">
+            <label for="nativeLanguageSelect">Translate to (Your Native Language):</label>
+            <select id="nativeLanguageSelect">
+              <option value="es">Spanish</option>
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="ja">Japanese</option>
+              <option value="zh-CN">Simplified Chinese</option>
+              <option value="pt">Portuguese</option>
+              <option value="it">Italian</option>
+              <option value="ko">Korean</option>
+              <option value="ru">Russian</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="learningLanguageSelect">Get Explanations/Examples in (Language you're learning):</label>
+            <select id="learningLanguageSelect">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="ja">Japanese</option>
+              <option value="zh-CN">Simplified Chinese</option>
+              <option value="pt">Portuguese</option>
+              <option value="it">Italian</option>
+              <option value="ko">Korean</option>
+              <option value="ru">Russian</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h2 data-emoji="🧠">AI Configuration (Ollama)</h2>
+          <div class="form-group">
+            <label for="ollamaServerUrl">Ollama Server URL:</label>
+            <input type="url" id="ollamaServerUrl" placeholder="e.g., http://localhost:11434">
+            <p class="text-muted-small">The address where your Ollama AI server is running.</p>
+          </div>
+          <div class="form-group">
+            <label for="aiTextModelSelect">Text Analysis Model:</label>
+            <select id="aiTextModelSelect"></select>
+            <p class="text-muted-small">Default: <code>gemma3:latest</code>.</p>
+          </div>
+          <div class="form-group">
+            <label for="aiMultimodalModelSelect">Image OCR & Analysis Model:</label>
+            <select id="aiMultimodalModelSelect"></select>
+            <p class="text-muted-small">Default: <code>qwen2.5vl:latest</code>.</p>
+          </div>
+          <button id="refreshModelsButton" class="btn btn-secondary">Refresh Model Lists</button>
+          <span id="modelRefreshStatus" class="text-muted-small" style="margin-left:10px;"></span>
+        </div>
+        <div class="settings-section">
+          <h2 data-emoji="🎨">App Theme</h2>
+          <div class="form-group theme-toggle-group">
+            <label for="themeToggleCheckbox" class="theme-toggle-label">
+              <input type="checkbox" id="themeToggleCheckbox">
+              <span class="toggle-switch"></span>
+              <span class="toggle-text">🌙 Dark Mode</span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h2 data-emoji="💾">Data Management</h2>
+          <p class="text-muted">Manage your stored learning data. These actions are irreversible.</p>
+          
+          <div class="data-management-actions">
+            <button id="exportDataButton" class="btn btn-info">Exportar Datos</button>
+            <small class="text-muted-small">Guarda todos tus datos en un archivo JSON.</small>
+          </div>
+          <div class="data-management-actions">
+            <label for="importDataInput" class="btn btn-info" style="display: inline-block; cursor: pointer;">Importar Datos</label>
+            <input type="file" id="importDataInput" accept=".json" style="display: none;">
+            <small class="text-muted-small">Carga datos desde un archivo JSON. Esto puede sobrescribir los datos existentes.</small>
+          </div>
+          <div class="data-management-actions">
+            <button id="resetStudyProgressButton" class="btn btn-warning">Reset Study Progress</button>
+            <small class="text-muted-small">Sets all card scores to 0 and clears study history.</small>
+          </div>
+          <div class="data-management-actions">
+            <button id="clearTempWordsButton" class="btn btn-warning">Delete All Temporary Words</button>
+            <small class="text-muted-small">Removes all words from the 'Words Pending Generation' list.</small>
+          </div>
+          <div class="data-management-actions danger-zone">
+            <button id="deleteAllDataButton" class="btn btn-danger">Delete ALL My Data</button>
+            <small class="text-muted-small"><strong>Warning:</strong> This will permanently delete all your cards, temporary words, and study history.</small>
+          </div>
+        </div>
+        <button id="saveAllSettings" class="btn btn-primary">Save All Settings</button>
+        <p id="settingsStatus" class="status-message"></p>
+    </div>
+    <script src="settings.js"></script>
+</body>
+</html>

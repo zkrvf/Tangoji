@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../theme-preload.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangoji - Generate Card</title>
+    <link rel="stylesheet" href="../dashboard/dashboard.css">
+    <link rel="stylesheet" href="generate.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="../../icons/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-inner-container">
+            <a href="../dashboard/dashboard.html" class="nav-logo-link">
+                <img src="../../icons/logo_web_transparent.png" alt="Tangoji Logo" id="navbarLogo">
+            </a>
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Home</a></li>
+                <li><a href="../import/import.html">Import</a></li>
+                <li><a href="../generate/generate.html" class="active">Generate</a></li>
+                <li><a href="../study/study.html">Study</a></li>
+                <li><a href="../progress/progress.html">Progress</a></li>
+                <li><a href="../settings/settings.html">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Generate New Card</h1>
+        <div id="generateCardContainer">
+            </div>
+        <div id="noTempWordsMessage_generate" style="display: none; text-align:center; margin-top:20px;">
+            <p>No more words in the temporary import list to process.</p>
+            <button id="switchToManualCreateBtn" class="btn btn-secondary">Create Card Manually</button>
+            <p class="mt-2"><a href="../import/import.html" class="btn btn-info">Import More Words?</a></p>
+        </div>
+        <template id="tempWordFormTemplate">
+            <div class="settings-section"> <p id="processingWordText" class="mb-1">Processing word from import list: <strong id="currentTempWordDisplay"></strong></p>
+                <form id="generateCardForm">
+                    <input type="hidden" name="temp_word_id" id="temp_word_id">
+                    <div class="form-group">
+                        <label for="word">Word/Phrase:</label>
+                        <input type="text" name="word" id="word" required readonly>
+                    </div>
+                    <div id="aiSuggestionsStatus" class="form-group text-muted" style="min-height: 1.5em; font-style: italic;"></div>
+                    <div class="form-group">
+                        <label for="translation">Translation:</label>
+                        <input type="text" name="translation" id="translation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="example">Example Sentence (optional):</label>
+                        <textarea name="example" id="example" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="grammar_note">Grammar Note (optional):</label>
+                        <input type="text" name="grammar_note" id="grammar_note">
+                    </div>
+                    <div class="form-group">
+                        <label for="image_url">Image URL (optional):</label>
+                        <div class="input-group">
+                            <input type="url" name="image_url" id="image_url" placeholder="https://example.com/image.jpg">
+                            <button type="button" id="searchImageButton" class="btn btn-info btn-sm">Search Image</button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="saveCardAndNextButton" class="btn btn-success">Save Card & Next</button>
+                        <button type="button" id="skipTempWordButton" class="btn btn-warning">Skip This Word</button>
+                    </div>
+                </form>
+            </div>
+        </template>
+        <template id="manualCardFormTemplate">
+             <div class="settings-section">
+                <p id="manualModeText" class="mb-1">Create a new card manually:</p>
+                <form id="manualGenerateCardForm">
+                    <div class="form-group">
+                        <label for="manual_word">Word/Phrase:</label>
+                        <input type="text" name="manual_word" id="manual_word" required>
+                    </div>
+                     <div id="manualAiSuggestionsStatus" class="form-group text-muted" style="min-height: 1.5em; font-style: italic;">
+                        <button type="button" id="getAISuggestionsManualBtn" class="btn btn-secondary btn-sm">Get AI Suggestions</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="manual_translation">Translation:</label>
+                        <input type="text" name="manual_translation" id="manual_translation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="manual_example">Example Sentence (optional):</label>
+                        <textarea name="manual_example" id="manual_example" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="manual_grammar_note">Grammar Note (optional):</label>
+                        <input type="text" name="manual_grammar_note" id="manual_grammar_note">
+                    </div>
+                    <div class="form-group">
+                        <label for="manual_image_url">Image URL (optional):</label>
+                        <div class="input-group">
+                            <input type="url" name="manual_image_url" id="manual_image_url" placeholder="https://example.com/image.jpg">
+                            <button type="button" id="searchImageButtonManual" class="btn btn-info btn-sm">Search Image</button>
+                        </div>
+                    </div>
+                     <div class="form-actions">
+                        <button type="submit" id="saveManualCardButton" class="btn btn-success">Save Card</button>
+                        <button type="button" id="loadNextTempWordBtn" class="btn btn-secondary" style="display:none;">Process Next Temp Word</button>
+                    </div>
+                </form>
+            </div>
+        </template>
+        <p id="generateCardStatus" class="status-message" style="margin-top: 20px;"></p>
+    </div>
+    <script src="generate.js"></script>
+</body>
+</html>

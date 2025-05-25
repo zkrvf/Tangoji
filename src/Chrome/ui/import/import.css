@@ -1,0 +1,61 @@
+#importWordsForm {
+    padding: 20px 25px;
+}
+#raw_words {
+    font-family: var(--font-family);
+    min-height: 120px;
+}
+#tempWordsTableContainer {
+    margin-top: 15px;
+    overflow-x: auto;
+}
+#tempWordsTable th,
+#tempWordsTable td {
+    padding: 10px 12px;
+    vertical-align: middle;
+}
+#tempWordsTable th {
+    font-size: 0.85em;
+}
+#tempWordsTable .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.85em;
+    margin-right: 5px;
+}
+#tempWordsTable .btn-danger.btn-sm {
+}
+#tempWordsTable .btn-secondary.btn-sm {
+}
+#noTempWordsMessage a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+#noTempWordsMessage a:hover {
+    color: var(--secondary-color);
+}
+#importStatus {
+    padding: 8px 12px;
+    min-height: 1.2em;
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: 500;
+    border-radius: var(--border-radius-small, 4px);
+    opacity: 0;
+    transform: translateY(5px);
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0.3s;
+}
+#importStatus.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    transition-delay: 0s, 0s, 0s;
+}
+#importStatus.success {
+    color: var(--primary-text-color, white);
+    background-color: var(--success-color, #4CAF50);
+}
+#importStatus.error {
+    color: var(--primary-text-color, white);
+    background-color: var(--error-color, #f44336);
+}

@@ -1,0 +1,74 @@
+#generateCardContainer .settings-section {
+    padding: 20px 25px;
+    margin-bottom: 20px;
+}
+#processingWordText, #manualModeText {
+    font-style: italic;
+    color: var(--text-muted-color);
+    margin-bottom: 15px !important;
+    text-align: center;
+}
+#processingWordText strong, #manualModeText strong {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.input-group input[type="url"] {
+    flex-grow: 1;
+}
+.input-group .btn-sm {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.form-actions .btn {
+    min-width: 150px;
+}
+#aiSuggestionsStatus, #manualAiSuggestionsStatus {
+    font-size: 0.9em;
+    padding: 5px 0;
+}
+#getAISuggestionsManualBtn {
+    margin-bottom: 10px;
+}
+/* En tu settings.css */
+.status-message {
+  margin-top: 15px;
+  padding: 10px 15px;
+  min-height: 1.2em;
+  font-size: 0.95em;
+  text-align: center;
+  font-weight: 500;
+  border-radius: var(--border-radius-small, 6px);
+  opacity: 0;
+  transform: translateY(10px); 
+  visibility: hidden; 
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out, visibility 0s linear 0.4s;
+}
+.status-message.show {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  transition-delay: 0s, 0s, 0s;
+}
+.status-message.success {
+  color: var(--primary-text-color, white);
+  background-color: var(--success-color, #4CAF50); /* Verde para éxito */
+  border: 1px solid var(--success-color-darker, #388E3C);
+}
+.status-message.error {
+  color: var(--primary-text-color, white);
+  background-color: var(--error-color, #f44336); /* Rojo para error */
+  border: 1px solid var(--error-color-darker, #d32f2f);
+}

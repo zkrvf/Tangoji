@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../theme-preload.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangoji - Learning Progress</title>
+    <link rel="stylesheet" href="../dashboard/dashboard.css">
+    <link rel="stylesheet" href="progress.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="../../icons/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-inner-container">
+            <a href="../dashboard/dashboard.html" class="nav-logo-link">
+                <img src="../../icons/logo_web_transparent.png" alt="Tangoji Logo" id="navbarLogo">
+            </a>
+            <ul>
+                <li><a href="../dashboard/dashboard.html">Home</a></li>
+                <li><a href="../import/import.html">Import</a></li>
+                <li><a href="../generate/generate.html">Generate</a></li>
+                <li><a href="../study/study.html">Study</a></li>
+                <li><a href="../progress/progress.html" class="active">Progress</a></li>
+                <li><a href="../settings/settings.html">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Your Learning Progress</h1>
+        <div class="stats-grid" id="progressStatsGrid">
+            <div class="stat-item">
+                <h3>Total Cards</h3>
+                <p id="statTotalCards">0</p>
+            </div>
+            <div class="stat-item">
+                <h3>Cards "Learned"</h3>
+                <p id="statLearnedCards">0</p>
+                <small class="text-muted">(Score &ge; 5)</small>
+            </div>
+            <div class="stat-item">
+                <h3>Accuracy Rate</h3>
+                <p id="statAccuracyRate">0%</p>
+                <small class="text-muted">(<span id="statStudyAttempts">0</span> attempts)</small>
+            </div>
+        </div>
+        <div class="settings-section">
+            <h2>All Cards Overview</h2>
+            <div id="allCardsTableContainer" style="overflow-x: auto;">
+                <table id="allCardsTable" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Word/Phrase</th>
+                            <th>Translation</th>
+                            <th>Score</th>
+                            <th>Created On</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allCardsTbody">
+                        </tbody>
+                </table>
+            </div>
+            <p id="noCardsMessage" style="display: none; text-align: center; margin-top: 20px;">
+                No cards found. Start by <a href="../improt/import.html">importing words</a> or <a href="../generate/generate.html">creating cards</a>.
+            </p>
+        </div>
+    </div>
+    <script src="progress.js"></script>
+</body>
+</html>

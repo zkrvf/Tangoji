@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "Tangoji",
+  "version": "1.0.2",
+  "description": "AI language learning with Ollama. Translate, OCR & create flashcards as you browse. Private & local.",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "declarativeNetRequest",
+    "downloads"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "http://localhost:11434/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "ui/settings/settings.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "Tangoji Dashboard"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/selection/selection-handler.js"],
+      "css": ["content/selection/selection-styles.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/capture/capture-handler.js"],
+      "css": ["content/capture/capture-styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/icon-48.png",
+        "icons/icon-96.png",
+        "icons/icon-128.png",
+        "icons/logo.png",
+        "icons/logo_web.png",
+        "icons/logo_web_transparent.png",
+        "icons/favicon.ico"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "rules/rules.json" 
+    }]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}
