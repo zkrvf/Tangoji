@@ -242,51 +242,73 @@ Example: {"translation":"Hola mundo","explanation":"A common greeting.","example
     })();
     return true;
   }
-  else if (request.action === "getAiMultimodalAnalysis") {
+else if (request.action === "getAiMultimodalAnalysis") {
     (async () => {
-      const settings = await getExtensionSettings();
-      const base64ImageData = request.imageData;
-      const ocrPrompt = `Extract all visible text from this image.
+        const settings = await getExtensionSettings();
+        const base64ImageData = request.imageData;
+        // console.log("BG: Received base64ImageData (raw):", base64ImageData);
+        if (base64ImageData && typeof base64ImageData === 'string') {
+            // console.log("BG: Length of base64ImageData:", base64ImageData.length);
+            // console.log("BG: Start of base64ImageData:", base64ImageData.substring(0, 100));
+        } else {
+            console.error("BG: base64ImageData is not a string or is null/undefined!");
+            sendResponse({ success: false, error: "Invalid image data received by background script." });
+            return;
+        }
+        const ocrPrompt = `Extract all visible text from this image.
 Respond STRICTLY with a single, minified JSON object with one key: "ocr_text".
 Example: {"ocr_text": "Text found."}
 If no text, "ocr_text" should be an empty string.`;
-      const ocrPayload = {
-        model: settings.aiMultimodalModelName,
-        prompt: ocrPrompt,
-        images: [base64ImageData.split(',')[1] || base64ImageData],
-        stream: false,
-        format: "json"
-      };
-      try {
-        const ocrOllamaData = await callOllamaDirectly(settings.ollamaServerUrl, ocrPayload);
-        const ocrResult = parseOllamaResponse(ocrOllamaData, ["ocr_text"]);
-        const detectedText = ocrResult.ocr_text;
-        if (!detectedText || detectedText.trim() === "") {
-          sendResponse({ success: true, data: { ocr_text: "", translation: `N/A (No text detected)` } });
-          return;
-        }
-        const analysisPrompt = `Translate to ${settings.nativeLanguage.name}: "${detectedText}".
+        const imageToSend = base64ImageData.split(',')[1] || base64ImageData;
+        // console.log("BG: imageToSend to Ollama (first 100 chars):", imageToSend.substring(0, 100));
+    // console.log("BG: Length of imageToSend:", imageToSend.length);
+        const ocrPayload = {
+            model: settings.aiMultimodalModelName,
+            prompt: ocrPrompt,
+            images: [imageToSend],
+            stream: false,
+            format: "json"
+        };
+        // console.log("BG: ocrPayload:", JSON.stringify(ocrPayload));
+        try {
+            // console.log("BG: Calling Ollama for OCR...");
+            const ocrOllamaData = await callOllamaDirectly(settings.ollamaServerUrl, ocrPayload);
+            // console.log("BG: Raw ocrOllamaData from Ollama:", JSON.stringify(ocrOllamaData));
+            const ocrResult = parseOllamaResponse(ocrOllamaData, ["ocr_text"]);
+            // console.log("BG: Parsed ocrResult:", ocrResult);
+            const detectedText = ocrResult.ocr_text;
+            // console.log("BG: detectedText:", detectedText);
+            if (!detectedText || detectedText.trim() === "") {
+                console.warn("BG: No text detected or text is empty. Sending N/A.");
+                sendResponse({ success: true, data: { ocr_text: "", translation: `N/A (No text detected)` } });
+                return;
+            }
+            const analysisPrompt = `Translate to ${settings.nativeLanguage.name}: "${detectedText}".
 Respond STRICTLY with a single, minified JSON object with one key: "translation".
 Example: {"translation": "Translated text."}`;
-        const analysisPayload = {
-          model: settings.aiTextModelName,
-          prompt: analysisPrompt,
-          stream: false,
-          format: "json"
-        };
-        const analysisOllamaData = await callOllamaDirectly(settings.ollamaServerUrl, analysisPayload);
-        const parsedAnalysis = parseOllamaResponse(analysisOllamaData, ["translation"]);
-        const finalData = {
-          ocr_text: detectedText,
-          translation: parsedAnalysis.translation
-        };
-        sendResponse({ success: true, data: finalData });
-      } catch (error) {
-        sendResponse({ success: false, error: error.message });
-      }
+            const analysisPayload = {
+                model: settings.aiTextModelName,
+                prompt: analysisPrompt,
+                stream: false,
+                format: "json"
+            };
+      // console.log("BG: Calling Ollama for text analysis/translation...");
+            const analysisOllamaData = await callOllamaDirectly(settings.ollamaServerUrl, analysisPayload);
+      // console.log("BG: Raw analysisOllamaData from Ollama:", JSON.stringify(analysisOllamaData));
+            const parsedAnalysis = parseOllamaResponse(analysisOllamaData, ["translation"]);
+      // console.log("BG: Parsed analysisResult:", parsedAnalysis);
+            const finalData = {
+                ocr_text: detectedText,
+                translation: parsedAnalysis.translation
+            };
+            sendResponse({ success: true, data: finalData });
+        } catch (error) {
+      console.error("BG: Error in getAiMultimodalAnalysis:", error.message, error.stack);
+            sendResponse({ success: false, error: error.message });
+        }
     })();
     return true;
-  }
+}
   else if (request.action === "saveToTangojiViaPopup") {
     (async () => {
         const result = await saveTextToTempWordsDexie(request.text);

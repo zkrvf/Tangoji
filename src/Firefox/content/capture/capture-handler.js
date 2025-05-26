@@ -89,47 +89,72 @@
       });
     }
   }
-  function cropImageAndProcess(fullImageDataUrl, cropX, cropY, cropWidth, cropHeight) {
+function cropImageAndProcess(fullImageDataUrl, cropX, cropY, cropWidth, cropHeight) {
     const img = new Image();
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-      try {
-        const croppedImageDataUrl = canvas.toDataURL('image/png');
-        const base64Image = croppedImageDataUrl.split(',')[1];
-        const popupBaseRect = {
-            top: cropY, left: cropX, bottom: cropY + cropHeight,
-            right: cropX + cropWidth, width: cropWidth, height: cropHeight
-        };
-        showCapturePopup("Processing image...", popupBaseRect);
-        browser.runtime.sendMessage({ action: "getAiMultimodalAnalysis", imageData: base64Image }, (aiResponse) => {
-          if (capturePopup) {
-            const loadingEl = document.getElementById("tangoji-capture-popup-loading");
-            const contentEl = document.getElementById("tangoji-capture-popup-content");
-            if (loadingEl) loadingEl.style.display = "none";
-            if (contentEl) contentEl.style.display = "block";
-            if (aiResponse && aiResponse.success && aiResponse.data) {
-              currentOcrText = aiResponse.data.ocr_text || "";
-              document.getElementById("tangoji-capture-ocr-text").textContent = aiResponse.data.ocr_text || "(No text detected)";
-              document.getElementById("tangoji-capture-translation").textContent = aiResponse.data.translation || "N/A";
-            } else {
-              document.getElementById("tangoji-capture-ocr-text").textContent = "Error processing image.";
-              document.getElementById("tangoji-capture-translation").textContent = "Error";
+        const dpr = window.devicePixelRatio || 1;
+        const physicalCropX = cropX * dpr;
+        const physicalCropY = cropY * dpr;
+        const physicalCropWidth = cropWidth * dpr;
+        const physicalCropHeight = cropHeight * dpr;
+        const canvas = document.createElement('canvas');
+        canvas.width = physicalCropWidth;
+        canvas.height = physicalCropHeight;
+        const ctx = canvas.getContext('2d');
+    console.log("Tangoji Capture Debug:");
+    console.log("Device Pixel Ratio:", dpr);
+    console.log("CSS Crop Rect (X,Y,W,H):", cropX, cropY, cropWidth, cropHeight);
+    console.log("Physical Crop Rect (X,Y,W,H):", physicalCropX, physicalCropY, physicalCropWidth, physicalCropHeight);
+    console.log("Original Image (captureVisibleTab) Dimensions (natural W,H):", img.naturalWidth, img.naturalHeight);
+    console.log("Viewport Dimensions (inner W,H):", window.innerWidth, window.innerHeight);
+    console.log("Expected Physical Capture Dim (approx):", window.innerWidth * dpr, window.innerHeight * dpr);
+        ctx.drawImage(
+            img,
+            physicalCropX,
+            physicalCropY,
+            physicalCropWidth,
+            physicalCropHeight,
+            0, 0, 
+            physicalCropWidth,
+            physicalCropHeight
+        );
+        try {
+            const croppedImageDataUrl = canvas.toDataURL('image/png');
+            const popupBaseRect = {
+                top: cropY, left: cropX, bottom: cropY + cropHeight, 
+                right: cropX + cropWidth, width: cropWidth, height: cropHeight
+            };
+            showCapturePopup("Processing image...", popupBaseRect);
+            browser.runtime.sendMessage({ action: "getAiMultimodalAnalysis", imageData: croppedImageDataUrl }, (aiResponse) => { 
+                if (capturePopup) {
+                    const loadingEl = document.getElementById("tangoji-capture-popup-loading");
+                    const contentEl = document.getElementById("tangoji-capture-popup-content");
+                    if (loadingEl) loadingEl.style.display = "none";
+                    if (contentEl) contentEl.style.display = "block";
+                    if (aiResponse && aiResponse.success && aiResponse.data) {
+                        currentOcrText = aiResponse.data.ocr_text || "";
+                        document.getElementById("tangoji-capture-ocr-text").textContent = aiResponse.data.ocr_text || "(No text detected)";
+                        document.getElementById("tangoji-capture-translation").textContent = aiResponse.data.translation || "N/A";
+                    } else {
+                        document.getElementById("tangoji-capture-ocr-text").textContent = "Error processing image.";
+                        document.getElementById("tangoji-capture-translation").textContent = aiResponse.data && aiResponse.data.translation ? aiResponse.data.translation : "Error"; 
+            if (aiResponse && !aiResponse.success) {
+                console.error("Tangoji AI Error:", aiResponse.error);
             }
-          }
-        });
-      } catch (e) {
-        alert("Error: Could not process captured image.");
-      }
+                    }
+                }
+            });
+        } catch (e) {
+            console.error("Error processing captured image:", e);
+            alert("Error: Could not process captured image. " + e.message);
+        }
     };
     img.onerror = () => {
-      alert("Error: Could not load captured image.");
+        console.error("Error: Could not load captured image for cropping. URL was:", fullImageDataUrl.substring(0,100) + "...");
+        alert("Error: Could not load captured image.");
     };
     img.src = fullImageDataUrl;
-  }
+}
   function createCapturePopup() {
     if (capturePopup) return;
     capturePopup = document.createElement("div");
@@ -173,7 +198,7 @@
         capturePopup.style.top = `${newTop}px`;
     });
     document.addEventListener("mouseup", () => {
-        if(isDraggingCapturePopup) { // Solo cambiar si este popup se estaba arrastrando
+        if(isDraggingCapturePopup) { 
             isDraggingCapturePopup = false;
         }
     });

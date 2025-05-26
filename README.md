@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.2-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.0.3-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-orange?style=for-the-badge" alt="License: CC BY-NC-SA 4.0">
   <img src="https://img.shields.io/badge/status-active-brightgreen?style=for-the-badge" alt="Status: Active">
 </p>
